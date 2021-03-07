@@ -1,8 +1,8 @@
 package cn.chenjy.java.amybbs.mapper.common;
-import org.apache.ibatis.annotations.Param;
 
 import cn.chenjy.java.amybbs.model.entity.UserBase;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserBaseMapper {
@@ -12,7 +12,7 @@ public interface UserBaseMapper {
 
     int updateByPrimaryKeySelective(UserBase record);
 
-    UserBase getOneByEmail(@Param("email")String email);
+    UserBase getOneByEmail(@Param("email") String email);
 
 
 }

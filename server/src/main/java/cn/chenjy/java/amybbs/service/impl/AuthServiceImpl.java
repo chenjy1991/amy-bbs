@@ -20,13 +20,10 @@ import cn.hutool.crypto.digest.DigestUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author ChenJY
@@ -75,21 +72,21 @@ public class AuthServiceImpl implements AuthService {
         //开始生成登陆信息
         LoginInfo info = new LoginInfo(userBase);
         UserToken userToken = userTokenMapper.getOneByUserId(userBase.getId());
-        if (userToken == null){
+        if (userToken == null) {
             userToken = new UserToken();
             userToken.setUserId(userBase.getId());
             userToken.setRefreshToken(IdUtil.simpleUUID());
             userToken.setRefreshExpire(TimeUtils.getTokenExpireTime(bbsConfigService.getRefreshExpireSecond()));
             userTokenMapper.insertSelective(userToken);
-        }else {
+        } else {
             userToken.setRefreshToken(IdUtil.simpleUUID());
             userToken.setRefreshExpire(TimeUtils.getTokenExpireTime(bbsConfigService.getRefreshExpireSecond()));
             userTokenMapper.updateByPrimaryKeySelective(userToken);
         }
-        String accessToken= IdUtil.randomUUID();
-        LocalDateTime accessExpire=TimeUtils.getTokenExpireTime(bbsConfigService.getAccessExpireSeccond());
-        redisService.set(CacheNameConst.USER_TOKEN_ACCESS+accessToken,userBase.getId()+"",bbsConfigService.getAccessExpireSeccond());
-        LoginToken token = new LoginToken(userToken,accessToken,accessExpire);
-        return LoginResult.OK(info,token);
+        String accessToken = IdUtil.randomUUID();
+        LocalDateTime accessExpire = TimeUtils.getTokenExpireTime(bbsConfigService.getAccessExpireSeccond());
+        redisService.set(CacheNameConst.USER_TOKEN_ACCESS + accessToken, userBase.getId() + "", bbsConfigService.getAccessExpireSeccond());
+        LoginToken token = new LoginToken(userToken, accessToken, accessExpire);
+        return LoginResult.OK(info, token);
     }
 }

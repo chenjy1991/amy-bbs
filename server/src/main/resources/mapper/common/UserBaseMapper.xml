@@ -1,191 +1,192 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.chenjy.java.amybbs.mapper.common.UserBaseMapper">
-  <resultMap id="BaseResultMap" type="cn.chenjy.java.amybbs.model.entity.UserBase">
-    <!--@mbg.generated-->
-    <!--@Table user_base-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
-    <result column="is_activated" jdbcType="TINYINT" property="isActivated" />
-    <result column="roles" jdbcType="VARCHAR" property="roles" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
-    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
-    <result column="background_image" jdbcType="VARCHAR" property="backgroundImage" />
-    <result column="home_page" jdbcType="VARCHAR" property="homePage" />
-    <result column="desc" jdbcType="VARCHAR" property="desc" />
-    <result column="score" jdbcType="INTEGER" property="score" />
-    <result column="topic_count" jdbcType="INTEGER" property="topicCount" />
-    <result column="comment_count" jdbcType="INTEGER" property="commentCount" />
-    <result column="forbidden_end_time" jdbcType="TIMESTAMP" property="forbiddenEndTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, create_time, update_time, is_deleted, is_activated, roles, email, nickname, avatar, 
-    background_image, home_page, `desc`, score, topic_count, comment_count, forbidden_end_time
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from user_base
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.chenjy.java.amybbs.model.entity.UserBase" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into user_base
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="isDeleted != null">
-        is_deleted,
-      </if>
-      <if test="isActivated != null">
-        is_activated,
-      </if>
-      <if test="roles != null">
-        roles,
-      </if>
-      <if test="email != null">
-        email,
-      </if>
-      <if test="nickname != null">
-        nickname,
-      </if>
-      <if test="avatar != null">
-        avatar,
-      </if>
-      <if test="backgroundImage != null">
-        background_image,
-      </if>
-      <if test="homePage != null">
-        home_page,
-      </if>
-      <if test="desc != null">
-        `desc`,
-      </if>
-      <if test="score != null">
-        score,
-      </if>
-      <if test="topicCount != null">
-        topic_count,
-      </if>
-      <if test="commentCount != null">
-        comment_count,
-      </if>
-      <if test="forbiddenEndTime != null">
-        forbidden_end_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null">
-        #{isDeleted,jdbcType=TINYINT},
-      </if>
-      <if test="isActivated != null">
-        #{isActivated,jdbcType=TINYINT},
-      </if>
-      <if test="roles != null">
-        #{roles,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null">
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="nickname != null">
-        #{nickname,jdbcType=VARCHAR},
-      </if>
-      <if test="avatar != null">
-        #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="backgroundImage != null">
-        #{backgroundImage,jdbcType=VARCHAR},
-      </if>
-      <if test="homePage != null">
-        #{homePage,jdbcType=VARCHAR},
-      </if>
-      <if test="desc != null">
-        #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="score != null">
-        #{score,jdbcType=INTEGER},
-      </if>
-      <if test="topicCount != null">
-        #{topicCount,jdbcType=INTEGER},
-      </if>
-      <if test="commentCount != null">
-        #{commentCount,jdbcType=INTEGER},
-      </if>
-      <if test="forbiddenEndTime != null">
-        #{forbiddenEndTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.chenjy.java.amybbs.model.entity.UserBase">
-    <!--@mbg.generated-->
-    update user_base
-    <set>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null">
-        is_deleted = #{isDeleted,jdbcType=TINYINT},
-      </if>
-      <if test="isActivated != null">
-        is_activated = #{isActivated,jdbcType=TINYINT},
-      </if>
-      <if test="roles != null">
-        roles = #{roles,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null">
-        email = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="nickname != null">
-        nickname = #{nickname,jdbcType=VARCHAR},
-      </if>
-      <if test="avatar != null">
-        avatar = #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="backgroundImage != null">
-        background_image = #{backgroundImage,jdbcType=VARCHAR},
-      </if>
-      <if test="homePage != null">
-        home_page = #{homePage,jdbcType=VARCHAR},
-      </if>
-      <if test="desc != null">
-        `desc` = #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="score != null">
-        score = #{score,jdbcType=INTEGER},
-      </if>
-      <if test="topicCount != null">
-        topic_count = #{topicCount,jdbcType=INTEGER},
-      </if>
-      <if test="commentCount != null">
-        comment_count = #{commentCount,jdbcType=INTEGER},
-      </if>
-      <if test="forbiddenEndTime != null">
-        forbidden_end_time = #{forbiddenEndTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <resultMap id="BaseResultMap" type="cn.chenjy.java.amybbs.model.entity.UserBase">
+        <!--@mbg.generated-->
+        <!--@Table user_base-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+        <result column="is_activated" jdbcType="TINYINT" property="isActivated"/>
+        <result column="roles" jdbcType="VARCHAR" property="roles"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+        <result column="background_image" jdbcType="VARCHAR" property="backgroundImage"/>
+        <result column="home_page" jdbcType="VARCHAR" property="homePage"/>
+        <result column="desc" jdbcType="VARCHAR" property="desc"/>
+        <result column="score" jdbcType="INTEGER" property="score"/>
+        <result column="topic_count" jdbcType="INTEGER" property="topicCount"/>
+        <result column="comment_count" jdbcType="INTEGER" property="commentCount"/>
+        <result column="forbidden_end_time" jdbcType="TIMESTAMP" property="forbiddenEndTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, create_time, update_time, is_deleted, is_activated, roles, email, nickname, avatar,
+        background_image, home_page, `desc`, score, topic_count, comment_count, forbidden_end_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from user_base
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="cn.chenjy.java.amybbs.model.entity.UserBase" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into user_base
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="isActivated != null">
+                is_activated,
+            </if>
+            <if test="roles != null">
+                roles,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+            <if test="backgroundImage != null">
+                background_image,
+            </if>
+            <if test="homePage != null">
+                home_page,
+            </if>
+            <if test="desc != null">
+                `desc`,
+            </if>
+            <if test="score != null">
+                score,
+            </if>
+            <if test="topicCount != null">
+                topic_count,
+            </if>
+            <if test="commentCount != null">
+                comment_count,
+            </if>
+            <if test="forbiddenEndTime != null">
+                forbidden_end_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="isActivated != null">
+                #{isActivated,jdbcType=TINYINT},
+            </if>
+            <if test="roles != null">
+                #{roles,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="backgroundImage != null">
+                #{backgroundImage,jdbcType=VARCHAR},
+            </if>
+            <if test="homePage != null">
+                #{homePage,jdbcType=VARCHAR},
+            </if>
+            <if test="desc != null">
+                #{desc,jdbcType=VARCHAR},
+            </if>
+            <if test="score != null">
+                #{score,jdbcType=INTEGER},
+            </if>
+            <if test="topicCount != null">
+                #{topicCount,jdbcType=INTEGER},
+            </if>
+            <if test="commentCount != null">
+                #{commentCount,jdbcType=INTEGER},
+            </if>
+            <if test="forbiddenEndTime != null">
+                #{forbiddenEndTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.chenjy.java.amybbs.model.entity.UserBase">
+        <!--@mbg.generated-->
+        update user_base
+        <set>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=TINYINT},
+            </if>
+            <if test="isActivated != null">
+                is_activated = #{isActivated,jdbcType=TINYINT},
+            </if>
+            <if test="roles != null">
+                roles = #{roles,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="backgroundImage != null">
+                background_image = #{backgroundImage,jdbcType=VARCHAR},
+            </if>
+            <if test="homePage != null">
+                home_page = #{homePage,jdbcType=VARCHAR},
+            </if>
+            <if test="desc != null">
+                `desc` = #{desc,jdbcType=VARCHAR},
+            </if>
+            <if test="score != null">
+                score = #{score,jdbcType=INTEGER},
+            </if>
+            <if test="topicCount != null">
+                topic_count = #{topicCount,jdbcType=INTEGER},
+            </if>
+            <if test="commentCount != null">
+                comment_count = #{commentCount,jdbcType=INTEGER},
+            </if>
+            <if test="forbiddenEndTime != null">
+                forbidden_end_time = #{forbiddenEndTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 
-<!--auto generated by MybatisCodeHelper on 2021-03-07-->
-  <select id="getOneByEmail" resultMap="BaseResultMap">
+    <!--auto generated by MybatisCodeHelper on 2021-03-07-->
+    <select id="getOneByEmail" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from user_base

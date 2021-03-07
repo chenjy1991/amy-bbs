@@ -6,9 +6,10 @@ public interface AuthService {
 
     /**
      * 邮箱登陆,并获取信息
+     *
      * @param email
      * @param password
      * @return
      */
-    CommonResult loginByEmail(String email,String password);
+    CommonResult loginByEmail(String email, String password);
 }

@@ -29,14 +29,14 @@ public class BbsConfigServiceImpl implements BbsConfigService {
     public Long getRefreshExpireSecond() {
         //默认30天，2592000秒
         Long expireSecond = 2592000L;
-        if (redisService.hasKey(CacheNameConst.BBS_CONF+ConfigKeyConst.REFRESH_TOKEN_EXPIRE)) {
-            String val = redisService.get(CacheNameConst.BBS_CONF+ConfigKeyConst.REFRESH_TOKEN_EXPIRE);
+        if (redisService.hasKey(CacheNameConst.BBS_CONF + ConfigKeyConst.REFRESH_TOKEN_EXPIRE)) {
+            String val = redisService.get(CacheNameConst.BBS_CONF + ConfigKeyConst.REFRESH_TOKEN_EXPIRE);
             expireSecond = Long.parseLong(val);
         } else {
             BbsConfig config = configMapper.getOneByKey(ConfigKeyConst.REFRESH_TOKEN_EXPIRE);
             if (config != null) {
                 expireSecond = Long.parseLong(config.getValue());
-                redisService.set(CacheNameConst.BBS_CONF+ConfigKeyConst.REFRESH_TOKEN_EXPIRE,expireSecond+"");
+                redisService.set(CacheNameConst.BBS_CONF + ConfigKeyConst.REFRESH_TOKEN_EXPIRE, expireSecond + "");
             }
         }
         return expireSecond;
@@ -46,14 +46,14 @@ public class BbsConfigServiceImpl implements BbsConfigService {
     public Long getAccessExpireSeccond() {
         //默认2小时，7200秒
         Long expireSecond = 7200L;
-        if (redisService.hasKey(CacheNameConst.BBS_CONF+ConfigKeyConst.ACCESS_TOKEN_EXPIRE)) {
-            String val = redisService.get(CacheNameConst.BBS_CONF+ConfigKeyConst.ACCESS_TOKEN_EXPIRE);
+        if (redisService.hasKey(CacheNameConst.BBS_CONF + ConfigKeyConst.ACCESS_TOKEN_EXPIRE)) {
+            String val = redisService.get(CacheNameConst.BBS_CONF + ConfigKeyConst.ACCESS_TOKEN_EXPIRE);
             expireSecond = Long.parseLong(val);
         } else {
             BbsConfig config = configMapper.getOneByKey(ConfigKeyConst.ACCESS_TOKEN_EXPIRE);
             if (config != null) {
                 expireSecond = Long.parseLong(config.getValue());
-                redisService.set(CacheNameConst.BBS_CONF+ConfigKeyConst.ACCESS_TOKEN_EXPIRE,expireSecond+"");
+                redisService.set(CacheNameConst.BBS_CONF + ConfigKeyConst.ACCESS_TOKEN_EXPIRE, expireSecond + "");
             }
         }
         return expireSecond;

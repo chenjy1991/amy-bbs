@@ -1,4 +1,4 @@
-package cn.chenjy.java.amybbs.config;
+package cn.chenjy.java.amybbs.framework.config;
 
 import cn.chenjy.java.amybbs.model.constant.ResponseHeaderConst;
 import org.slf4j.Logger;
@@ -19,6 +19,7 @@ import org.springframework.web.util.pattern.PathPatternParser;
 public class CrosConfig {
     private static final Logger LOG = LoggerFactory.getLogger(CrosConfig.class);
     private static final String TAG = "CrosConfig";
+
     @Bean
     public CorsWebFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();

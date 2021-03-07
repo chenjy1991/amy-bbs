@@ -3,8 +3,8 @@ package cn.chenjy.java.amybbs.model.entity;
 import java.time.LocalDateTime;
 
 /**
-    * 用户密钥
-    */
+ * 用户密钥
+ */
 public class UserSecret {
     private Long id;
 
@@ -13,23 +13,23 @@ public class UserSecret {
     private LocalDateTime updateTime;
 
     /**
-    * 用户id
-    */
+     * 用户id
+     */
     private Integer userId;
 
     /**
-    * 密钥类型
-    */
+     * 密钥类型
+     */
     private String secretType;
 
     /**
-    * 密钥id
-    */
+     * 密钥id
+     */
     private String secretId;
 
     /**
-    * 密钥值
-    */
+     * 密钥值
+     */
     private String secretKey;
 
     public Long getId() {

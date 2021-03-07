@@ -45,6 +45,7 @@ public class LoginResult extends CommonResult {
 
     /**
      * 用户不存在
+     *
      * @return
      */
     public static CommonResult UnfoundError() {
@@ -60,7 +61,7 @@ public class LoginResult extends CommonResult {
         return CommonResult.ERROR("A0203", "用户账户已作废");
     }
 
-    public static CommonResult LoginException(){
-        return CommonResult.ERROR("A0200","用户登录异常");
+    public static CommonResult LoginException() {
+        return CommonResult.ERROR("A0200", "用户登录异常");
     }
 }

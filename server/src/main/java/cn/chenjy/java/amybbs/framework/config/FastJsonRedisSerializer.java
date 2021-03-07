@@ -1,4 +1,4 @@
-package cn.chenjy.java.amybbs.config;
+package cn.chenjy.java.amybbs.framework.config;
 
 
 import com.alibaba.fastjson.JSON;

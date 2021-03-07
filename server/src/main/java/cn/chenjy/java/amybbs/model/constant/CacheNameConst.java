@@ -9,8 +9,8 @@ public class CacheNameConst {
     //系统配置信息缓存
     public static final String BBS_CONF = "bbs:conf:";
     //用户refreshToken
-    public static final String USER_TOKEN_REFRESH="bbs:user:token:refresh:";
+    public static final String USER_TOKEN_REFRESH = "bbs:user:token:refresh:";
     //用户accessToken
-    public static final String USER_TOKEN_ACCESS="bbs:user:token:access:";
+    public static final String USER_TOKEN_ACCESS = "bbs:user:token:access:";
 
 }

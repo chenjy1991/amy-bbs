@@ -1,8 +1,8 @@
 package cn.chenjy.java.amybbs.mapper.common;
-import org.apache.ibatis.annotations.Param;
 
 import cn.chenjy.java.amybbs.model.entity.BbsConfig;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface BbsConfigMapper {
@@ -12,7 +12,7 @@ public interface BbsConfigMapper {
 
     int updateByPrimaryKeySelective(BbsConfig record);
 
-    BbsConfig getOneByKey(@Param("key")String key);
+    BbsConfig getOneByKey(@Param("key") String key);
 
 
 }

@@ -3,8 +3,8 @@ package cn.chenjy.java.amybbs.model.entity;
 import java.time.LocalDateTime;
 
 /**
-    * 系统配置信息
-    */
+ * 系统配置信息
+ */
 public class BbsConfig {
     private Integer id;
 
@@ -13,23 +13,23 @@ public class BbsConfig {
     private LocalDateTime updateTime;
 
     /**
-    * 配置项
-    */
+     * 配置项
+     */
     private String key;
 
     /**
-    * 配置值
-    */
+     * 配置值
+     */
     private String value;
 
     /**
-    * 配置项名称
-    */
+     * 配置项名称
+     */
     private String name;
 
     /**
-    * 配置项描述
-    */
+     * 配置项描述
+     */
     private String description;
 
     public Integer getId() {

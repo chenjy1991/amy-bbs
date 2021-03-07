@@ -1,8 +1,8 @@
 package cn.chenjy.java.amybbs.mapper.common;
-import org.apache.ibatis.annotations.Param;
 
 import cn.chenjy.java.amybbs.model.entity.UserToken;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserTokenMapper {
@@ -12,7 +12,7 @@ public interface UserTokenMapper {
 
     int updateByPrimaryKeySelective(UserToken record);
 
-    UserToken getOneByUserId(@Param("userId")Integer userId);
+    UserToken getOneByUserId(@Param("userId") Integer userId);
 
 
 }
