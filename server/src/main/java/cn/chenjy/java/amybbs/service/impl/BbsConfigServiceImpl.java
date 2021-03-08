@@ -73,4 +73,49 @@ public class BbsConfigServiceImpl implements BbsConfigService {
         }
         return key;
     }
+
+    @Override
+    public String getActivateUrl() {
+        String url = "http://localhost:8080/activate.html";
+        if (redisService.hasKey(CacheNameConst.BBS_CONF + ConfigKeyConst.ACTIVATE_URL)) {
+            url = redisService.get(CacheNameConst.BBS_CONF + ConfigKeyConst.ACTIVATE_URL);
+        } else {
+            BbsConfig config = configMapper.getOneByKey(ConfigKeyConst.ACTIVATE_URL);
+            if (config != null) {
+                url = config.getValue();
+                redisService.set(CacheNameConst.BBS_CONF + ConfigKeyConst.ACTIVATE_URL, url);
+            }
+        }
+        return url;
+    }
+
+    @Override
+    public String getHomeUrl() {
+        String url = "https://github.com/chenjy1991/amy-bbs";
+        if (redisService.hasKey(CacheNameConst.BBS_CONF + ConfigKeyConst.HOME_URL)) {
+            url = redisService.get(CacheNameConst.BBS_CONF + ConfigKeyConst.HOME_URL);
+        } else {
+            BbsConfig config = configMapper.getOneByKey(ConfigKeyConst.HOME_URL);
+            if (config != null) {
+                url = config.getValue();
+                redisService.set(CacheNameConst.BBS_CONF + ConfigKeyConst.HOME_URL, url);
+            }
+        }
+        return url;
+    }
+
+    @Override
+    public String getBbsName() {
+        String bbsName = "amy-bbs";
+        if (redisService.hasKey(CacheNameConst.BBS_CONF + ConfigKeyConst.BBS_NAME)) {
+            bbsName = redisService.get(CacheNameConst.BBS_CONF + ConfigKeyConst.BBS_NAME);
+        } else {
+            BbsConfig config = configMapper.getOneByKey(ConfigKeyConst.BBS_NAME);
+            if (config != null) {
+                bbsName = config.getValue();
+                redisService.set(CacheNameConst.BBS_CONF + ConfigKeyConst.BBS_NAME, bbsName);
+            }
+        }
+        return bbsName;
+    }
 }

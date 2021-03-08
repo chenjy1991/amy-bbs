@@ -1,5 +1,6 @@
 package cn.chenjy.java.amybbs.service;
 
+import cn.chenjy.java.amybbs.model.request.auth.FindbackPassword;
 import cn.chenjy.java.amybbs.model.request.auth.Reg;
 import cn.chenjy.java.amybbs.model.response.CommonResult;
 
@@ -13,8 +14,20 @@ public interface AuthService {
      */
     CommonResult reg(Reg data);
 
+    /**
+     * 发送账户激活邮件
+     *
+     * @param userId
+     * @return
+     */
     CommonResult sendActivateMail(Integer userId);
 
+    /**
+     * 激活账户
+     *
+     * @param code
+     * @return
+     */
     CommonResult activateAccount(String code);
 
     /**
@@ -35,4 +48,19 @@ public interface AuthService {
      * @return
      */
     CommonResult modifyPassword(Integer userId, String oldPass, String newPass);
+
+    /**
+     * 发送找回密码邮件
+     *
+     * @param userId
+     * @return
+     */
+    CommonResult sendFindbackPasswordEmail(String email);
+
+    /**
+     * 找回密码
+     *
+     * @return
+     */
+    CommonResult findbackPassword(FindbackPassword data);
 }

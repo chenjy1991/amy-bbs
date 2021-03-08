@@ -67,11 +67,17 @@
             <artifactId>hutool-all</artifactId>
             <version>5.5.9</version>
         </dependency>
-        <!-- 国密算法 -->
+        <!-- hutool工具包-国密算法 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15on</artifactId>
             <version>1.60</version>
+        </dependency>
+        <!-- hutool工具包-邮箱工具 -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
         </dependency>
     </dependencies>
 

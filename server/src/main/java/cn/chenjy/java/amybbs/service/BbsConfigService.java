@@ -7,4 +7,10 @@ public interface BbsConfigService {
     Long getAccessExpireSeccond();
 
     String getSm4Key();
+
+    String getActivateUrl();
+
+    String getHomeUrl();
+
+    String getBbsName();
 }

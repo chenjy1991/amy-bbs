@@ -3,12 +3,11 @@ package cn.chenjy.java.amybbs.controller;
 import cn.chenjy.java.amybbs.framework.annotation.Auth;
 import cn.chenjy.java.amybbs.framework.annotation.LoginStatus;
 import cn.chenjy.java.amybbs.model.request.auth.ActivateAction;
+import cn.chenjy.java.amybbs.model.request.auth.FindbackPassword;
 import cn.chenjy.java.amybbs.model.request.auth.ModifyPassword;
 import cn.chenjy.java.amybbs.model.request.auth.Reg;
 import cn.chenjy.java.amybbs.model.response.CommonResult;
-import cn.chenjy.java.amybbs.model.response.auth.ActivateResult;
-import cn.chenjy.java.amybbs.model.response.auth.LoginResult;
-import cn.chenjy.java.amybbs.model.response.auth.RegResult;
+import cn.chenjy.java.amybbs.model.response.auth.AuthResult;
 import cn.chenjy.java.amybbs.service.AuthService;
 import cn.chenjy.java.amybbs.util.MatchUtils;
 import org.slf4j.Logger;
@@ -41,10 +40,10 @@ public class AuthController {
     @Auth(loginStatus = LoginStatus.LOGOUT)
     public CommonResult reg(@RequestBody Reg data) {
         if (MatchUtils.verifyEmail(data.getEmail())) {
-            return RegResult.EmailFormatError();
+            return AuthResult.EmailFormatError();
         }
         if (MatchUtils.verifyPassword(data.getPassword())) {
-            return RegResult.PasswordFormatError();
+            return AuthResult.PasswordFormatError();
         }
         return authService.reg(data);
     }
@@ -59,7 +58,7 @@ public class AuthController {
     public CommonResult sendActivateMail(@RequestHeader("userId") Integer userId) {
         //简单判断userId
         if (userId == 0) {
-            return LoginResult.UnfoundError();
+            return AuthResult.UnfountUserError();
         }
         return authService.sendActivateMail(userId);
     }
@@ -75,7 +74,7 @@ public class AuthController {
     public CommonResult activateAccount(@RequestBody ActivateAction data) {
         //验证检验码
         if (StringUtils.isEmpty(data.getCode())) {
-            return ActivateResult.ActivateCodeError();
+            return AuthResult.ActivateCodeError();
         }
         return authService.activateAccount(data.getCode());
     }
@@ -92,11 +91,11 @@ public class AuthController {
     public CommonResult login(String email, String password) {
         //校验邮箱地址格式
         if (!MatchUtils.verifyEmail(email)) {
-            return LoginResult.EmailFormatError();
+            return AuthResult.EmailFormatError();
         }
         //校验密码格式，大于等于8位，至少英文+数字
         if (!MatchUtils.verifyPassword(password)) {
-            return LoginResult.PasswordFormatError();
+            return AuthResult.PasswordFormatError();
         }
         return authService.loginByEmail(email, password);
     }
@@ -107,18 +106,41 @@ public class AuthController {
      * @param data
      * @return
      */
-    @PostMapping("modifyPassword")
+    @PostMapping("password/modify")
     public CommonResult modifyPassword(@RequestBody ModifyPassword data, @RequestHeader("userId") Integer userId) {
         //校验密码格式，大于等于8位，至少英文+数字
         if (!MatchUtils.verifyPassword(data.getNewPassword()) || !MatchUtils.verifyPassword(data.getOldPassword())) {
-            return LoginResult.PasswordFormatError();
+            return AuthResult.PasswordFormatError();
         }
         //简单判断userId
         if (userId == 0) {
-            return LoginResult.UnfoundError();
+            return AuthResult.UnfountUserError();
         }
         return authService.modifyPassword(userId, data.getOldPassword(), data.getNewPassword());
     }
 
+    /**
+     * 发送找回密码邮件
+     *
+     * @param email
+     * @return
+     */
+    @GetMapping("password/findback/mail")
+    public CommonResult getFindbackPasswordEmail(String email) {
+        if (!MatchUtils.verifyEmail(email)) {
+            return AuthResult.EmailFormatError();
+        }
+        return authService.sendFindbackPasswordEmail(email);
+    }
 
+    /**
+     * 找回密码
+     *
+     * @param data
+     * @return
+     */
+    @PostMapping("password/findback/action")
+    public CommonResult findbackPassword(@RequestBody FindbackPassword data) {
+        return authService.findbackPassword(data);
+    }
 }

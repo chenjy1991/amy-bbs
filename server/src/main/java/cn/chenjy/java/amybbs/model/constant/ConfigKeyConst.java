@@ -13,4 +13,10 @@ public class ConfigKeyConst {
 
     public static final String SM4_KEY = "sm4_key";
 
+    public static final String ACTIVATE_URL = "site_url_activate";
+
+    public static final String HOME_URL = "site_url_home";
+
+    public static final String BBS_NAME = "bbs_name";
+
 }

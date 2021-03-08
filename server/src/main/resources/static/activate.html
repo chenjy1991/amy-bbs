@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>账户激活</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.2/jquery.js"></script>
+    <script>
+        var code = getQueryString('code');
+        var url="http://localhost:8080/auth/activate/action"
+        window.onload = function () {
+            if(code != null && $.trim(code).length > 0){
+                $.ajax({
+                    url: url,
+                    type:'POST',
+                    contentType:"application/json; charset=utf-8",
+                    data:JSON.stringify( {"code":code}),
+                    dataType:'json',
+                    success: function(ret){
+                        if (ret.errCode==="00000"){
+                            $("#result").html("激活成功");
+                        }else {
+                            $("#result").html(ret.errMsg);
+                        }
+
+                    }
+                });
+            }else {
+
+            }
+        };
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]);
+            return null;
+        }
+    </script>
+</head>
+<body>
+<p id="result"></p>
+</body>
+</html>

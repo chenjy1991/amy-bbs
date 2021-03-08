@@ -8,10 +8,14 @@ import cn.chenjy.java.amybbs.model.constant.UserSecretTypeConst;
 import cn.chenjy.java.amybbs.model.entity.UserBase;
 import cn.chenjy.java.amybbs.model.entity.UserSecret;
 import cn.chenjy.java.amybbs.model.entity.UserToken;
+import cn.chenjy.java.amybbs.model.request.auth.FindbackPassword;
 import cn.chenjy.java.amybbs.model.request.auth.Reg;
 import cn.chenjy.java.amybbs.model.response.CommonResult;
-import cn.chenjy.java.amybbs.model.response.auth.*;
+import cn.chenjy.java.amybbs.model.response.auth.AuthResult;
+import cn.chenjy.java.amybbs.model.response.auth.LoginInfo;
+import cn.chenjy.java.amybbs.model.response.auth.LoginToken;
 import cn.chenjy.java.amybbs.service.AuthService;
+import cn.chenjy.java.amybbs.service.MailService;
 import cn.chenjy.java.amybbs.service.RedisService;
 import cn.chenjy.java.amybbs.service.SecretService;
 import cn.chenjy.java.amybbs.util.TimeUtils;
@@ -47,6 +51,8 @@ public class AuthServiceImpl implements AuthService {
     BbsConfigServiceImpl bbsConfigService;
     @Autowired
     SecretService secretService;
+    @Autowired
+    MailService mailService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -54,11 +60,11 @@ public class AuthServiceImpl implements AuthService {
         //1 验证邮箱及昵称是否重复
         int emailFlag = userBaseMapper.countByEmail(data.getEmail());
         if (emailFlag > 0) {
-            return RegResult.EmailExistedError();
+            return AuthResult.EmailExistedError();
         }
         int nicknameFlag = userBaseMapper.countByNickname(data.getNickname());
         if (nicknameFlag > 0) {
-            return RegResult.NicknameExistedError();
+            return AuthResult.NicknameExistedError();
         }
         //2 创建账户
         UserBase userBase = new UserBase();
@@ -79,31 +85,38 @@ public class AuthServiceImpl implements AuthService {
     public CommonResult sendActivateMail(Integer userId) {
         UserBase userBase = userBaseMapper.selectByPrimaryKey(userId);
         if (userBase == null) {
-            return ActivateResult.UnfountUserError();
+            return AuthResult.UnfountUserError();
         }
         if (!userBase.getIsActivated()) {
             //未激活
             //激活码
             String code = secretService.encodeBySm4(userId + "");
+            mailService.sendRegisterMail(userBase.getEmail(), code);
             return CommonResult.OK(code);
         } else {
-            return ActivateResult.ActivatedError();
+            return AuthResult.ActivatedError();
         }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CommonResult activateAccount(String code) {
-        Integer userId = Integer.parseInt(secretService.decodeBySm4(code));
+        Integer userId = 0;
+        try {
+            userId = Integer.parseInt(secretService.decodeBySm4(code));
+        } catch (Exception e) {
+            return AuthResult.ActivateCodeError();
+        }
+
         UserBase userBase = userBaseMapper.selectByPrimaryKey(userId);
         if (userBase == null) {
-            return ActivateResult.UnfountUserError();
+            return AuthResult.UnfountUserError();
         }
         if (!userBase.getIsActivated()) {
             userBaseMapper.updateIsActivatedById(true, userId);
             return CommonResult.OK();
         } else {
-            return ActivateResult.ActivatedError();
+            return AuthResult.ActivatedError();
         }
     }
 
@@ -113,22 +126,22 @@ public class AuthServiceImpl implements AuthService {
         UserBase userBase = userBaseMapper.getOneByEmail(email);
         //用户未找到
         if (userBase == null) {
-            return LoginResult.UnfoundError();
+            return AuthResult.UnfountUserError();
         }
         /**
          * 已删除
          */
         if (userBase.getIsDeleted()) {
-            return LoginResult.DeletedError();
+            return AuthResult.DeletedError();
         }
         //判断密码
         UserSecret userSecret = userSecretMapper.getOneByUserIdAndSecretTypeAndSecretId(userBase.getId(), UserSecretTypeConst.PASSWORD, userBase.getId() + "");
         if (userSecret == null) {
-            return LoginResult.LoginException();
+            return AuthResult.LoginException();
         }
         //密码错误
         if (!userSecret.getSecretKey().equals(DigestUtil.md5Hex(password + userBase.getId()))) {
-            return LoginResult.PasswordError();
+            return AuthResult.PasswordError();
         }
         //开始生成登陆信息
         LoginInfo info = new LoginInfo(userBase);
@@ -148,7 +161,7 @@ public class AuthServiceImpl implements AuthService {
         LocalDateTime accessExpire = TimeUtils.getTokenExpireTime(bbsConfigService.getAccessExpireSeccond());
         redisService.set(CacheNameConst.USER_TOKEN_ACCESS + accessToken, userBase.getId() + "", bbsConfigService.getAccessExpireSeccond());
         LoginToken token = new LoginToken(userToken, accessToken, accessExpire);
-        return LoginResult.OK(info, token);
+        return AuthResult.LoginOK(info, token);
     }
 
     @Override
@@ -156,12 +169,23 @@ public class AuthServiceImpl implements AuthService {
     public CommonResult modifyPassword(Integer userId, String oldPass, String newPass) {
         UserSecret userSecret = userSecretMapper.getOneByUserIdAndSecretTypeAndSecretId(userId, UserSecretTypeConst.PASSWORD, userId + "");
         if (userSecret == null) {
-            return LoginResult.UnfoundError();
+            return AuthResult.UnfountUserError();
         }
         if (!DigestUtil.md5Hex(oldPass + userId).equals(userSecret.getSecretKey())) {
             return CommonResult.ERROR("A0210", "用户密码错误");
         }
         userSecretMapper.updateSecretKeyById(DigestUtil.md5Hex(newPass + userId), userSecret.getId());
+        return CommonResult.OK();
+    }
+
+    @Override
+    public CommonResult sendFindbackPasswordEmail(String email) {
+        mailService.sendFindbackPwdMail(email, "123456");
+        return CommonResult.OK();
+    }
+
+    @Override
+    public CommonResult findbackPassword(FindbackPassword data) {
         return CommonResult.OK();
     }
 }
