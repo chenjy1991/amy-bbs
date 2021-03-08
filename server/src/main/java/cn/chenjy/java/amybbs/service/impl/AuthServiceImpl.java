@@ -89,4 +89,17 @@ public class AuthServiceImpl implements AuthService {
         LoginToken token = new LoginToken(userToken, accessToken, accessExpire);
         return LoginResult.OK(info, token);
     }
+
+    @Override
+    public CommonResult modifyPassword(Integer userId, String oldPass, String newPass) {
+        UserSecret userSecret = userSecretMapper.getOneByUserIdAndSecretTypeAndSecretId(userId, UserSecretTypeConst.PASSWORD, userId + "");
+        if (userSecret == null) {
+            return LoginResult.UnfoundError();
+        }
+        if (!DigestUtil.md5Hex(oldPass + userId).equals(userSecret.getSecretKey())) {
+            return CommonResult.ERROR("A0210", "用户密码错误");
+        }
+        userSecretMapper.updateSecretKeyById(DigestUtil.md5Hex(newPass + userId), userSecret.getId());
+        return CommonResult.OK();
+    }
 }

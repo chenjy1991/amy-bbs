@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @author ChenJY
  * @create 2021/3/6 11:31 下午
@@ -36,6 +34,7 @@ public class AuthController {
      * @return
      */
     @GetMapping("login")
+    @Auth(loginStatus = LoginStatus.LOGOUT)
     public CommonResult login(String email, String password) {
         /**
          * 校验邮箱地址格式
@@ -47,7 +46,7 @@ public class AuthController {
          * 校验密码格式，大于等于8位，至少英文+数字
          */
         if (!MatchUtils.verifyPassword(password)) {
-            return LoginResult.PasswordError();
+            return LoginResult.PasswordFormatError();
         }
         return authService.loginByEmail(email, password);
     }
@@ -55,15 +54,18 @@ public class AuthController {
     /**
      * 修改密码
      *
-     * @param request
      * @param data
      * @return
      */
     @PostMapping("modifyPassword")
-    @Auth(loginStatus = LoginStatus.LOGOUT)
-    public CommonResult modifyPassword(HttpServletRequest request, @RequestBody ModifyPassword data) {
-        Integer userId = Integer.parseInt(request.getHeader("userId"));
-        return CommonResult.OK(userId);
+    public CommonResult modifyPassword(@RequestBody ModifyPassword data, @RequestHeader("userId") Integer userId) {
+        if (!MatchUtils.verifyPassword(data.getNewPassword()) || !MatchUtils.verifyPassword(data.getOldPassword())) {
+            return LoginResult.PasswordFormatError();
+        }
+        if (userId == 0) {
+            return LoginResult.UnfoundError();
+        }
+        return authService.modifyPassword(userId, data.getOldPassword(), data.getNewPassword());
     }
 
 

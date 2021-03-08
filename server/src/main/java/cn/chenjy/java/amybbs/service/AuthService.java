@@ -12,4 +12,14 @@ public interface AuthService {
      * @return
      */
     CommonResult loginByEmail(String email, String password);
+
+    /**
+     * 修改密码
+     *
+     * @param userId
+     * @param oldPass
+     * @param newPass
+     * @return
+     */
+    CommonResult modifyPassword(Integer userId, String oldPass, String newPass);
 }

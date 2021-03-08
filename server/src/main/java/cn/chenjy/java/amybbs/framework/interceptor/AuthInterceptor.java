@@ -2,6 +2,7 @@ package cn.chenjy.java.amybbs.framework.interceptor;
 
 import cn.chenjy.java.amybbs.framework.annotation.Auth;
 import cn.chenjy.java.amybbs.framework.annotation.LoginStatus;
+import cn.chenjy.java.amybbs.framework.annotation.UserId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
@@ -21,6 +22,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String path = request.getServletPath();
         if (handler instanceof HandlerMethod) {
             Auth auth = ((HandlerMethod) handler).getMethodAnnotation(Auth.class);
             if (auth == null) {
@@ -28,10 +30,14 @@ public class AuthInterceptor implements HandlerInterceptor {
             } else {
                 LoginStatus loginStatus = auth.loginStatus();
                 if (loginStatus == LoginStatus.LOGOUT) {
-                    System.out.println("无需验证");
+                    LOG.info("无需验证:" + path);
                 } else {
-                    System.out.println("验证token");
+                    LOG.info("权限验证:" + path);
                 }
+            }
+            UserId userId = ((HandlerMethod) handler).getMethodAnnotation(UserId.class);
+            if (userId != null) {
+
             }
         }
         return true;

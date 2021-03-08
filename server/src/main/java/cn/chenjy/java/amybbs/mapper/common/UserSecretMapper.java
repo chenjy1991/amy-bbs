@@ -14,5 +14,7 @@ public interface UserSecretMapper {
 
     UserSecret getOneByUserIdAndSecretTypeAndSecretId(@Param("userId") Integer userId, @Param("secretType") String secretType, @Param("secretId") String secretId);
 
+    int updateSecretKeyById(@Param("updatedSecretKey") String updatedSecretKey, @Param("id") Long id);
+
 
 }

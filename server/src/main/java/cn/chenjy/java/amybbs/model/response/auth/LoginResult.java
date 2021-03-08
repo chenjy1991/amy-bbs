@@ -44,6 +44,15 @@ public class LoginResult extends CommonResult {
     }
 
     /**
+     * 密码格式错误
+     *
+     * @return
+     */
+    public static CommonResult PasswordFormatError() {
+        return CommonResult.ERROR("A0122", "密码强度不够");
+    }
+
+    /**
      * 用户不存在
      *
      * @return
