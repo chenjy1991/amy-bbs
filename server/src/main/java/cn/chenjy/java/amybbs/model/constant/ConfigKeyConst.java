@@ -19,4 +19,6 @@ public class ConfigKeyConst {
 
     public static final String BBS_NAME = "bbs_name";
 
+    public static final String MAIL_CONFIG = "mail_config";
+
 }

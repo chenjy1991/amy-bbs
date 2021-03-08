@@ -25,7 +25,7 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void sendRegisterMail(String email, String code) {
-        MailAccount account = new MailAccount(MailAccount.MAIL_SETTING_PATHS[0]);
+        MailAccount account = bbsConfigService.getMailConfig();
         account.setFrom(bbsConfigService.getBbsName() + "<" + account.getFrom() + ">");
         MailUtil.send(account
                 , CollUtil.newArrayList(email)
@@ -39,7 +39,7 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void sendFindbackPwdMail(String email, String code) {
-        MailAccount account = new MailAccount(MailAccount.MAIL_SETTING_PATHS[0]);
+        MailAccount account = bbsConfigService.getMailConfig();
         account.setFrom(bbsConfigService.getBbsName() + "<" + account.getFrom() + ">");
         MailUtil.send(account
                 , CollUtil.newArrayList(email)

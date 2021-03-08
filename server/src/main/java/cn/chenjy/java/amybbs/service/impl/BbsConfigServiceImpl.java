@@ -3,13 +3,17 @@ package cn.chenjy.java.amybbs.service.impl;
 import cn.chenjy.java.amybbs.mapper.common.BbsConfigMapper;
 import cn.chenjy.java.amybbs.model.constant.CacheNameConst;
 import cn.chenjy.java.amybbs.model.constant.ConfigKeyConst;
+import cn.chenjy.java.amybbs.model.dto.MailConfig;
 import cn.chenjy.java.amybbs.model.entity.BbsConfig;
 import cn.chenjy.java.amybbs.service.BbsConfigService;
 import cn.chenjy.java.amybbs.service.RedisService;
+import cn.hutool.extra.mail.MailAccount;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * @author ChenJY
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Service;
 public class BbsConfigServiceImpl implements BbsConfigService {
     private static final Logger LOG = LoggerFactory.getLogger(BbsConfigServiceImpl.class);
     private static final String TAG = "BbsConfigService";
+
     @Autowired
     BbsConfigMapper configMapper;
     @Autowired
@@ -117,5 +122,38 @@ public class BbsConfigServiceImpl implements BbsConfigService {
             }
         }
         return bbsName;
+    }
+
+    @Override
+    public MailAccount getMailConfig() {
+        String mailConfigJson = "";
+        if (redisService.hasKey(CacheNameConst.BBS_CONF + ConfigKeyConst.MAIL_CONFIG)) {
+            mailConfigJson = redisService.get(CacheNameConst.BBS_CONF + ConfigKeyConst.MAIL_CONFIG);
+        } else {
+            BbsConfig config = configMapper.getOneByKey(ConfigKeyConst.MAIL_CONFIG);
+            if (config != null) {
+                mailConfigJson = config.getValue();
+                redisService.set(CacheNameConst.BBS_CONF + ConfigKeyConst.MAIL_CONFIG, mailConfigJson);
+            }
+        }
+        if (StringUtils.isEmpty(mailConfigJson)) {
+            return null;
+        } else {
+            MailConfig mailConfig = JSON.parseObject(mailConfigJson, MailConfig.class);
+            MailAccount mailAccount = new MailAccount();
+            mailAccount.setHost(mailConfig.getHost());
+            mailAccount.setPort(mailConfig.getPort());
+            mailAccount.setFrom(mailConfig.getFrom());
+            mailAccount.setUser(mailConfig.getUser());
+            mailAccount.setPass(mailConfig.getPass());
+            mailAccount.setStarttlsEnable(mailConfig.getStarttlsEnable());
+            mailAccount.setSslEnable(mailConfig.getSslEnable());
+            mailAccount.setSocketFactoryClass(mailConfig.getSocketFactoryClass());
+            mailAccount.setSocketFactoryFallback(mailConfig.getSocketFactoryFallback());
+            mailAccount.setSocketFactoryPort(mailConfig.getSocketFactoryPort());
+            mailAccount.setTimeout(mailConfig.getTimeout());
+            mailAccount.setConnectionTimeout(mailConfig.getConnectionTimeout());
+            return mailAccount;
+        }
     }
 }
