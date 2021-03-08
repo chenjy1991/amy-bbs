@@ -13,4 +13,5 @@ public class CacheNameConst {
     //用户accessToken
     public static final String USER_TOKEN_ACCESS = "bbs:user:token:access:";
 
+    public static final String AUTH_FINDBACK_PWD_CODE = "bbs:auth:password-findback-code:";
 }

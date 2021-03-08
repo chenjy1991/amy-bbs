@@ -74,7 +74,7 @@ public class AuthController {
     public CommonResult activateAccount(@RequestBody ActivateAction data) {
         //验证检验码
         if (StringUtils.isEmpty(data.getCode())) {
-            return AuthResult.ActivateCodeError();
+            return AuthResult.VerifyCodeError();
         }
         return authService.activateAccount(data.getCode());
     }
@@ -141,6 +141,15 @@ public class AuthController {
      */
     @PostMapping("password/findback/action")
     public CommonResult findbackPassword(@RequestBody FindbackPassword data) {
+        if (!MatchUtils.verifyEmail(data.getEmail())) {
+            return AuthResult.EmailFormatError();
+        }
+        if (StringUtils.isEmpty(data.getCode()) || data.getCode().length() != 8) {
+            return AuthResult.VerifyCodeError();
+        }
+        if (!MatchUtils.verifyPassword(data.getPassword())) {
+            return AuthResult.PasswordFormatError();
+        }
         return authService.findbackPassword(data);
     }
 }

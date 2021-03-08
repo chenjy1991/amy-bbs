@@ -52,7 +52,7 @@ public class AuthResult {
      *
      * @return
      */
-    public static CommonResult ActivateCodeError() {
+    public static CommonResult VerifyCodeError() {
         return CommonResult.ERROR("A0130", "校验码输入错误");
     }
 

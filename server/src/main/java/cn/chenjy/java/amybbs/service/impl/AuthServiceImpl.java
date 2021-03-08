@@ -20,6 +20,7 @@ import cn.chenjy.java.amybbs.service.RedisService;
 import cn.chenjy.java.amybbs.service.SecretService;
 import cn.chenjy.java.amybbs.util.TimeUtils;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             userId = Integer.parseInt(secretService.decodeBySm4(code));
         } catch (Exception e) {
-            return AuthResult.ActivateCodeError();
+            return AuthResult.VerifyCodeError();
         }
 
         UserBase userBase = userBaseMapper.selectByPrimaryKey(userId);
@@ -180,12 +181,27 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public CommonResult sendFindbackPasswordEmail(String email) {
-        mailService.sendFindbackPwdMail(email, "123456");
+        UserBase userBase = userBaseMapper.getOneByEmail(email);
+        if (userBase == null) {
+            return AuthResult.UnfountUserError();
+        }
+        String code = RandomUtil.randomString("0123456789abcdefghjkmnpqrstuvwxyz", 8);
+        redisService.set(CacheNameConst.AUTH_FINDBACK_PWD_CODE + userBase.getId(), code, 600);
+        mailService.sendFindbackPwdMail(email, code);
         return CommonResult.OK();
     }
 
     @Override
     public CommonResult findbackPassword(FindbackPassword data) {
+        UserBase userBase = userBaseMapper.getOneByEmail(data.getEmail());
+        if (userBase == null) {
+            return AuthResult.UnfountUserError();
+        }
+        if (!redisService.hasKey(CacheNameConst.AUTH_FINDBACK_PWD_CODE + userBase.getId())) {
+            return AuthResult.VerifyCodeError();
+        }
+        userSecretMapper.updateSecretKeyByUserIdAndSecretTypeAndSecretId(DigestUtil.md5Hex(data.getPassword() + userBase.getId()), userBase.getId(), UserSecretTypeConst.PASSWORD, userBase.getId() + "");
+        redisService.del(CacheNameConst.AUTH_FINDBACK_PWD_CODE + userBase.getId());
         return CommonResult.OK();
     }
 }
