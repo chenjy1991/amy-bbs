@@ -126,6 +126,7 @@ public class AuthController {
      * @return
      */
     @GetMapping("password/findback/mail")
+    @Auth(LoginStatus.LOGOUT)
     public CommonResult getFindbackPasswordEmail(String email) {
         if (!MatchUtils.verifyEmail(email)) {
             return AuthResult.EmailFormatError();
@@ -140,6 +141,7 @@ public class AuthController {
      * @return
      */
     @PostMapping("password/findback/action")
+    @Auth(LoginStatus.LOGOUT)
     public CommonResult findbackPassword(@RequestBody FindbackPassword data) {
         if (!MatchUtils.verifyEmail(data.getEmail())) {
             return AuthResult.EmailFormatError();
