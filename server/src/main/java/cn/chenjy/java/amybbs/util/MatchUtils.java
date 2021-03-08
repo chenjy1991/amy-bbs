@@ -3,6 +3,7 @@ package cn.chenjy.java.amybbs.util;
 import cn.hutool.core.util.ReUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 /**
  * @author ChenJY
@@ -18,16 +19,23 @@ public class MatchUtils {
     private static final String REGEX_EMAIL = "[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?";
 
     public static boolean verifyPassword(String password) {
-//        Pattern pattern = Pattern.compile(REGEX_PASSWORD);
-//        return pattern.matcher(password).matches();
+        if (StringUtils.isEmpty(password)) {
+            return false;
+        }
         return ReUtil.isMatch(REGEX_PASSWORD, password);
     }
 
     public static boolean verifyMobile(String mobile) {
+        if (StringUtils.isEmpty(mobile)) {
+            return false;
+        }
         return ReUtil.isMatch(REGEX_MOBILE, mobile);
     }
 
     public static boolean verifyEmail(String email) {
+        if (StringUtils.isEmpty(email)) {
+            return false;
+        }
         return ReUtil.isMatch(REGEX_EMAIL, email);
     }
 }

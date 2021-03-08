@@ -58,4 +58,19 @@ public class BbsConfigServiceImpl implements BbsConfigService {
         }
         return expireSecond;
     }
+
+    @Override
+    public String getSm4Key() {
+        String key = "<chenjy:amy-bbs>";
+        if (redisService.hasKey(CacheNameConst.BBS_CONF + ConfigKeyConst.SM4_KEY)) {
+            key = redisService.get(CacheNameConst.BBS_CONF + ConfigKeyConst.SM4_KEY);
+        } else {
+            BbsConfig config = configMapper.getOneByKey(ConfigKeyConst.SM4_KEY);
+            if (config != null) {
+                key = config.getValue();
+                redisService.set(CacheNameConst.BBS_CONF + ConfigKeyConst.SM4_KEY, key);
+            }
+        }
+        return key;
+    }
 }

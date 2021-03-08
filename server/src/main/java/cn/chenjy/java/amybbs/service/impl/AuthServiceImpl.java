@@ -8,12 +8,12 @@ import cn.chenjy.java.amybbs.model.constant.UserSecretTypeConst;
 import cn.chenjy.java.amybbs.model.entity.UserBase;
 import cn.chenjy.java.amybbs.model.entity.UserSecret;
 import cn.chenjy.java.amybbs.model.entity.UserToken;
+import cn.chenjy.java.amybbs.model.request.auth.Reg;
 import cn.chenjy.java.amybbs.model.response.CommonResult;
-import cn.chenjy.java.amybbs.model.response.auth.LoginInfo;
-import cn.chenjy.java.amybbs.model.response.auth.LoginResult;
-import cn.chenjy.java.amybbs.model.response.auth.LoginToken;
+import cn.chenjy.java.amybbs.model.response.auth.*;
 import cn.chenjy.java.amybbs.service.AuthService;
 import cn.chenjy.java.amybbs.service.RedisService;
+import cn.chenjy.java.amybbs.service.SecretService;
 import cn.chenjy.java.amybbs.util.TimeUtils;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.digest.DigestUtil;
@@ -45,6 +45,67 @@ public class AuthServiceImpl implements AuthService {
     RedisService redisService;
     @Autowired
     BbsConfigServiceImpl bbsConfigService;
+    @Autowired
+    SecretService secretService;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult reg(Reg data) {
+        //1 验证邮箱及昵称是否重复
+        int emailFlag = userBaseMapper.countByEmail(data.getEmail());
+        if (emailFlag > 0) {
+            return RegResult.EmailExistedError();
+        }
+        int nicknameFlag = userBaseMapper.countByNickname(data.getNickname());
+        if (nicknameFlag > 0) {
+            return RegResult.NicknameExistedError();
+        }
+        //2 创建账户
+        UserBase userBase = new UserBase();
+        userBase.setEmail(data.getEmail());
+        userBase.setNickname(data.getNickname());
+        userBaseMapper.insertSelective(userBase);
+        UserSecret userSecret = new UserSecret();
+        userSecret.setUserId(userBase.getId());
+        userSecret.setSecretType(UserSecretTypeConst.PASSWORD);
+        userSecret.setSecretId(userBase.getId() + "");
+        userSecret.setSecretKey(DigestUtil.md5Hex(data.getPassword() + userBase.getId()));
+        userSecretMapper.insertSelective(userSecret);
+        return CommonResult.OK();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult sendActivateMail(Integer userId) {
+        UserBase userBase = userBaseMapper.selectByPrimaryKey(userId);
+        if (userBase == null) {
+            return ActivateResult.UnfountUserError();
+        }
+        if (!userBase.getIsActivated()) {
+            //未激活
+            //激活码
+            String code = secretService.encodeBySm4(userId + "");
+            return CommonResult.OK(code);
+        } else {
+            return ActivateResult.ActivatedError();
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult activateAccount(String code) {
+        Integer userId = Integer.parseInt(secretService.decodeBySm4(code));
+        UserBase userBase = userBaseMapper.selectByPrimaryKey(userId);
+        if (userBase == null) {
+            return ActivateResult.UnfountUserError();
+        }
+        if (!userBase.getIsActivated()) {
+            userBaseMapper.updateIsActivatedById(true, userId);
+            return CommonResult.OK();
+        } else {
+            return ActivateResult.ActivatedError();
+        }
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -91,6 +152,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CommonResult modifyPassword(Integer userId, String oldPass, String newPass) {
         UserSecret userSecret = userSecretMapper.getOneByUserIdAndSecretTypeAndSecretId(userId, UserSecretTypeConst.PASSWORD, userId + "");
         if (userSecret == null) {

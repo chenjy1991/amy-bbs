@@ -6,4 +6,5 @@ public interface BbsConfigService {
 
     Long getAccessExpireSeccond();
 
+    String getSm4Key();
 }

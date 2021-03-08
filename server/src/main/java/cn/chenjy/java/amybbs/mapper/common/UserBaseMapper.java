@@ -14,5 +14,11 @@ public interface UserBaseMapper {
 
     UserBase getOneByEmail(@Param("email") String email);
 
+    Integer countByEmail(@Param("email") String email);
+
+    Integer countByNickname(@Param("nickname") String nickname);
+
+    int updateIsActivatedById(@Param("updatedIsActivated") Boolean updatedIsActivated, @Param("id") Integer id);
+
 
 }

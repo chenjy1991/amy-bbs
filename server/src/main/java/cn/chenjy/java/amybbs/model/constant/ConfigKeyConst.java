@@ -11,4 +11,6 @@ public class ConfigKeyConst {
 
     public static final String ACCESS_TOKEN_EXPIRE = "access_token_expire";
 
+    public static final String SM4_KEY = "sm4_key";
+
 }
