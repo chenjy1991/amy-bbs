@@ -6,28 +6,29 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.2/jquery.js"></script>
     <script>
         var code = getQueryString('code');
-        var url="http://localhost:8080/auth/activate/action"
+        var url = "http://localhost:8080/auth/activate/action"
         window.onload = function () {
-            if(code != null && $.trim(code).length > 0){
+            if (code != null && $.trim(code).length > 0) {
                 $.ajax({
                     url: url,
-                    type:'POST',
-                    contentType:"application/json; charset=utf-8",
-                    data:JSON.stringify( {"code":code}),
-                    dataType:'json',
-                    success: function(ret){
-                        if (ret.errCode==="00000"){
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({"code": code}),
+                    dataType: 'json',
+                    success: function (ret) {
+                        if (ret.errCode === "00000") {
                             $("#result").html("激活成功");
-                        }else {
+                        } else {
                             $("#result").html(ret.errMsg);
                         }
 
                     }
                 });
-            }else {
-
+            } else {
+                $("#result").html("邮件激活码获取失败，请直接跳转邮件中的链接或复制完整的链接地址");
             }
         };
+
         function getQueryString(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
             var r = window.location.search.substr(1).match(reg);

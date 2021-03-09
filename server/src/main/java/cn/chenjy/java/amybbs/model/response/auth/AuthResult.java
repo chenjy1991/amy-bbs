@@ -115,5 +115,39 @@ public class AuthResult {
         return CommonResult.ERROR("A0200", "用户登录异常");
     }
 
+    /**
+     * 访问未授权
+     *
+     * @return
+     */
+    public static CommonResult UntokenError() {
+        return CommonResult.ERROR("A0301", "访问未授权");
+    }
 
+    /**
+     * 授权已过期
+     *
+     * @return
+     */
+    public static CommonResult TokenExpiredError() {
+        return CommonResult.ERROR("A0311", "授权已过期");
+    }
+
+    /**
+     * 无权限使用API
+     *
+     * @return
+     */
+    public static CommonResult UnauthError() {
+        return CommonResult.ERROR("A0312", "无权限使用API");
+    }
+
+    /**
+     * 用户登录已过期
+     *
+     * @return
+     */
+    public static CommonResult LoginExpired() {
+        return CommonResult.ERROR("A0230", "用户登录已过期");
+    }
 }

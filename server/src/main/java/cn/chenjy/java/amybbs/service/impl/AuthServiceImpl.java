@@ -22,6 +22,7 @@ import cn.chenjy.java.amybbs.util.TimeUtils;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +163,7 @@ public class AuthServiceImpl implements AuthService {
         LocalDateTime accessExpire = TimeUtils.getTokenExpireTime(bbsConfigService.getAccessExpireSeccond());
         redisService.set(CacheNameConst.USER_TOKEN_ACCESS + accessToken, userBase.getId() + "", bbsConfigService.getAccessExpireSeccond());
         LoginToken token = new LoginToken(userToken, accessToken, accessExpire);
+        redisService.set(CacheNameConst.USER_INFO + userBase.getId(), JSON.toJSONString(info));
         return AuthResult.LoginOK(info, token);
     }
 

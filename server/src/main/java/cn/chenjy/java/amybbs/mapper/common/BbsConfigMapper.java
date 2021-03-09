@@ -4,6 +4,8 @@ import cn.chenjy.java.amybbs.model.entity.BbsConfig;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface BbsConfigMapper {
     int insertSelective(BbsConfig record);
@@ -13,6 +15,10 @@ public interface BbsConfigMapper {
     int updateByPrimaryKeySelective(BbsConfig record);
 
     BbsConfig getOneByKey(@Param("key") String key);
+
+    List<BbsConfig> listAll();
+
+    int updateByKey(@Param("updated") BbsConfig updated, @Param("key") String key);
 
 
 }

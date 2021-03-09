@@ -8,10 +8,16 @@ package cn.chenjy.java.amybbs.model.constant;
 public class CacheNameConst {
     //系统配置信息缓存
     public static final String BBS_CONF = "bbs:conf:";
+
     //用户refreshToken
     public static final String USER_TOKEN_REFRESH = "bbs:user:token:refresh:";
+
     //用户accessToken
     public static final String USER_TOKEN_ACCESS = "bbs:user:token:access:";
 
+    //用户登录信息
+    public static final String USER_INFO = "bbs:user:login-info:";
+
+    //找回密码验证码
     public static final String AUTH_FINDBACK_PWD_CODE = "bbs:auth:password-findback-code:";
 }

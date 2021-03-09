@@ -1,5 +1,7 @@
 package cn.chenjy.java.amybbs.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 /**
@@ -8,8 +10,10 @@ import java.time.LocalDateTime;
 public class BbsConfig {
     private Integer id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime createTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime updateTime;
 
     /**

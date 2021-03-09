@@ -1,11 +1,16 @@
 package cn.chenjy.java.amybbs.model.constant;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author ChenJY
  * @create 2021/3/7 2:21 上午
  * @DESCRIPTION
  */
 public class ConfigKeyConst {
+
+    public static final List<String> KEYS = Arrays.asList("refresh_token_expire", "access_token_expire", "sm4_key", "site_url_activate", "site_url_home", "bbs_name", "mail_config");
 
     public static final String REFRESH_TOKEN_EXPIRE = "refresh_token_expire";
 
